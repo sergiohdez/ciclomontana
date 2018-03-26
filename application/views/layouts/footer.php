@@ -1,6 +1,6 @@
     <footer class="footer">
         <div class="container">
-            <span class="text-muted">&copy; <?php echo date('Y'); ?> - Tienda Ciclo Monta&ntilde;ismo</span>
+            <span class="text-muted">&copy; <?php echo date('Y'); ?> - CicloMonta&ntilde;a S.A.</span>
         </div>
     </footer>
     <!-- Optional JavaScript -->

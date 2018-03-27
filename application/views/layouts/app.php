@@ -9,50 +9,38 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 		<title>
-            <?php echo isset($title) ? $title .  ' - ': ''; ?>
-            Tienda Ciclo Monta&ntilde;a
+            <?php echo isset($title) ? $title .  ' - ': ''; ?>Tienda Ciclo Monta&ntilde;a
 		</title>
 
-		<style type="text/css">
-		/* Sticky footer styles
-		-------------------------------------------------- */
-		html {
-			position: relative;
-			min-height: 100%;
-		}
-		body {
-			/* Margin bottom by footer height */
-			margin-bottom: 60px;
-		}
-		.footer {
-			position: absolute;
-			bottom: 0;
-			width: 100%;
-			/* Set the fixed height of the footer here */
-			height: 60px;
-			line-height: 60px; /* Vertically center the text there */
-			background-color: #f5f5f5;
-		}
-		body > .container {
-			padding: 60px 15px 0;
-		}
-		.footer > .container {
-			padding-right: 15px;
-			padding-left: 15px;
-		}
-		code {
-			font-size: 80%;
-		}
-		</style>
+		<link rel="stylesheet" href="<?php echo base_url('assets/css/app.css'); ?>" >
+		<?php echo isset($styles) ? $styles : ''; ?>
 	</head>
 
 	<body>
         <?php echo isset($header) ? $header : ''; ?>
         <main role="main" class="container">
+			<?php echo isset($title) ? '<h2>' . $title . '</h2>' : ''; ?>
             <?php echo isset($breadcrumb) ? $breadcrumb : ''; ?>
+			<?php
+			if (!is_null($success)) {
+				echo '<div class="alert alert-success alert-dismissible fade in" role="alert">';
+				echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				echo '<span aria-hidden="true">&times;</span>';
+				echo '</button>' . $success . '</div>';
+			}
+			if (!is_null($errors)) {
+				echo '<div class="alert alert-danger alert-dismissible fade in" role="alert">';
+				echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+				echo '<span aria-hidden="true">&times;</span>';
+				echo '</button>' . $errors . '</div>';
+			}
+			?>
             <?php echo isset($content) ? $content : ''; ?>
         </main>
         <?php echo isset($footer) ? $footer : ''; ?>
+		<script type="text/javascript">
+		var base_url = '<?php echo base_url(); ?>';
+		</script>
         <?php echo isset($scripts) ? $scripts : ''; ?>
     </body>
 </html>

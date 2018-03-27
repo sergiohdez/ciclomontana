@@ -37,7 +37,29 @@
 			?>
             <?php echo isset($content) ? $content : ''; ?>
         </main>
+		
+		<!-- Ventana modal para uso de crear/ver/editar/borrar -->
+		<div class="modal fade" id="modalView" role="dialog" aria-labelledby="ActionsModalView">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalViewTitle"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="modalViewBody">
+						Cargando...
+					</div>
+					<div class="modal-footer" id="modalViewBtn" style="display: none;">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-primary" id="modalViewBtnAccept">Aceptar</button>
+					</div>
+				</div>
+			</div>
+		</div>
         <?php echo isset($footer) ? $footer : ''; ?>
+		<?php echo script_tag('assets/js/app.js'); ?>
 		<script type="text/javascript">
 		var base_url = '<?php echo base_url(); ?>';
 		</script>

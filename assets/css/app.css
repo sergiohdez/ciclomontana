@@ -1,6 +1,3 @@
-/* Sticky footer styles
--------------------------------------------------- */
-
 html {
     position: relative;
     min-height: 100%;
@@ -33,4 +30,47 @@ body>.container {
 
 code {
     font-size: 80%;
+}
+
+
+/*
+ * Form Validation
+ */
+
+
+/* Validation */
+
+label.error {
+    color: #cc5965;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.form-control.error {
+    border: 1px dotted #cc5965;
+}
+
+
+/*
+ * DatePicker
+ */
+
+.datepicker {
+    z-index: 1050!important;
+}
+
+@media screen and (max-width: 767px) {
+    .table-responsive {
+        border: none!important;
+    }
+}
+
+
+/*
+ * Popover
+ */
+
+.popover-content {
+    max-height: 400px;
+    overflow-y: auto;
 }

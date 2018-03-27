@@ -7,6 +7,41 @@ class Visitas_model extends CI_Model {
         parent::__construct();
     }
 
+	public function insert($data = array()) {
+		if (count($data) > 0) {
+			return $this->db->insert('VISITA', $data);
+		}
+		return FALSE;
+	}
+
+	public function update($data = array()) {
+		if (count($data) > 0) {
+			$this->db->where('ID_VISITA', $data['ID_VISITA']);
+			return $this->db->update('VISITA', $data);
+		}
+		return FALSE;
+	}
+
+	public function delete($data = array()) {
+		if (count($data) > 0) {
+			$this->db->where('ID_VISITA', $data['ID_VISITA']);
+			return $this->db->delete('VISITA');
+		}
+		return FALSE;
+	}
+
+	public function get($id = FALSE) {
+		$this->db->select('T0.ID_VISITA, T0.FECHA, T1.NOM_VENDEDOR, T0.VALOR_NETO, T0.VALOR_VISITA, T2.NOMBRE, T0.OBSERVACIONES, T0.ID_VISITA AS ACTIONS');
+		$this->db->from('VISITA T0');
+		$this->db->join('VENDEDOR T1', 'T0.COD_VENDEDOR = T1.COD_VENDEDOR', 'lef');
+		$this->db->join('CLIENTE T2', 'T0.ID_CLIENTE = T2.ID_CLIENTE', 'left');
+		if ($id !== FALSE) {
+			$this->db->where('T0.ID_VISITA', $id);
+		}
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
     public function get_dt() {
         $response = array();
 
@@ -18,19 +53,16 @@ class Visitas_model extends CI_Model {
 		$search = $this->input->post('search');
 
 		$this->db->start_cache();
-		$this->db->select('T0.SEQ_MATRIZ_RIESGO, T0.NOMBRE_MATRIZ, T0.SEQ_MACRO_PROCESO, T1.NOMBRE_MACRO_PROCESO, T1.INICIALES_MACRO_PROCESO, T0.USR_ENCARGADO, T3.NOMBRE_FUNC AS NOMBRE_ENCARGADO, T0.ACTIVO, T0.SEQ_MATRIZ_RIESGO AS ACTIONS');
-		$this->db->from('CWT.ADMR_MATRIZ_RIESGOS T0');
-		$this->db->join('CWT.ADMR_MACRO_PROCESOS T1', 'T0.SEQ_MACRO_PROCESO = T1.SEQ_MACRO_PROCESO');
-		$this->db->join('CWT.ADMR_USUARIOS_MACRO_PROCESOS T2', 'T0.SEQ_MACRO_PROCESO = T2.SEQ_MACRO_PROCESO AND T2.COD_USUARIO = \'' . $this->session->userdata('username') . '\'', 'left');
-		$this->db->join('CWT.ADMR_DATOS_FUNCIONARIO T3', 'T0.USR_ENCARGADO = T3.COD_FUNC', 'left');
+		$this->db->select('T0.ID_VISITA, T0.FECHA, T1.NOM_VENDEDOR, T0.VALOR_NETO, T0.VALOR_VISITA, T2.NOMBRE, T0.OBSERVACIONES, T0.ID_VISITA AS ACTIONS');
+		$this->db->from('VISITA T0');
+		$this->db->join('VENDEDOR T1', 'T0.COD_VENDEDOR = T1.COD_VENDEDOR', 'lef');
+		$this->db->join('CLIENTE T2', 'T0.ID_CLIENTE = T2.ID_CLIENTE', 'left');
 		$this->db->group_start();
-		$this->db->where('T0.USR_ENCARGADO', $this->session->userdata('username'));
-		$this->db->or_where('T2.COD_USUARIO', $this->session->userdata('username'));
-		$this->db->group_end();
-		$this->db->group_start();
-		$this->db->like('T0.NOMBRE_MATRIZ', $search['value'], 'both');
-		$this->db->or_like('T1.NOMBRE_MACRO_PROCESO', $search['value'], 'both');
-		$this->db->or_like('T1.INICIALES_MACRO_PROCESO', $search['value'], 'both');
+		$this->db->like('T1.NOM_VENDEDOR', $search['value'], 'both');
+		$this->db->or_like('T2.NOMBRE', $search['value'], 'both');
+		$this->db->or_like('T0.OBSERVACIONES', $search['value'], 'both');
+		$this->db->or_like('T0.ID_VISITA', $search['value'], 'both');
+		$this->db->or_like('T0.FECHA', $search['value'], 'both');
 		$this->db->group_end();
 		$this->db->order_by($columns[$order[0]['column']]['name'], $order[0]['dir']);
 		$data_filter = $this->db->get()->result_array();
@@ -45,5 +77,9 @@ class Visitas_model extends CI_Model {
 		$response['data'] = $data;
 
 		return $response;
-    }
+	}
+	
+	public function get_total() {
+		return $this->db->count_all('VISITA');
+	}
 }

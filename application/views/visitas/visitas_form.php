@@ -10,7 +10,7 @@ $html .= form_open(base_url(uri_string()), array('id' => 'form-visitas', 'class'
 $html .= form_hidden('id_visita', $default['id_visita']);
 $html .= '<div class="form-group row">';
 $html .= form_label('Fecha Visita', 'fecha', array('class' => 'col-sm-3 col-form-label'));
-$html .= '<div class="col-sm-7">';
+$html .= '<div class="col-sm-9">';
 // $html .= '<div class="input-group date">';
 $input_fecha = array(
 	'maxlength' => '10',
@@ -28,7 +28,7 @@ $html .= '</div>';
 $html .= '</div>';
 $html .= '<div class="form-group row">';
 $html .= form_label('Vendedor', 'cod_vendedor', array('class' => 'col-sm-3 col-form-label'));
-$html .= '<div class="col-sm-7">';
+$html .= '<div class="col-sm-9">';
 $options_vendedor = array('' => '- Seleccione -');
 foreach ($vendedores as $e) {
 	$options_vendedor[$e['COD_VENDEDOR']] = $e['NOM_VENDEDOR'];
@@ -46,7 +46,7 @@ $html .= '</div>';
 $html .= '</div>';
 $html .= '<div class="form-group row">';
 $html .= form_label('Cliente', 'id_cliente', array('class' => 'col-sm-3 col-form-label'));
-$html .= '<div class="col-sm-7">';
+$html .= '<div class="col-sm-9">';
 $options_cliente = array('' => '- Seleccione -');
 foreach ($clientes as $e) {
 	$options_cliente[$e['ID_CLIENTE']] = $e['NOMBRE'];
@@ -64,7 +64,7 @@ $html .= '</div>';
 $html .= '</div>';
 $html .= '<div class="form-group row">';
 $html .= form_label('Valor Neto', 'valor_neto', array('class' => 'col-sm-3 col-form-label'));
-$html .= '<div class="col-sm-7">';
+$html .= '<div class="col-sm-9">';
 // $html .= '<div class="input-group">';
 $input_valor_neto = array(
 	'maxlength' => '15',
@@ -84,7 +84,7 @@ $html .= '</div>';
 $html .= '</div>';
 $html .= '<div class="form-group row">';
 $html .= form_label('Observaciones', 'observaciones', array('class' => 'col-sm-3 col-form-label'));
-$html .= '<div class="col-sm-7">';
+$html .= '<div class="col-sm-9">';
 $input_observaciones = array(
 	'maxlength' => '1000',
 	'class' => 'form-control',

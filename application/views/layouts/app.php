@@ -22,13 +22,13 @@
 			<?php echo isset($title) ? '<h2>' . $title . '</h2>' : ''; ?>
             <?php echo isset($breadcrumb) ? $breadcrumb : ''; ?>
 			<?php
-			if (!is_null($success)) {
+			if (isset($success) && !is_null($success)) {
 				echo '<div class="alert alert-success alert-dismissible fade in" role="alert">';
 				echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
 				echo '<span aria-hidden="true">&times;</span>';
 				echo '</button>' . $success . '</div>';
 			}
-			if (!is_null($errors)) {
+			if (isset($errors) && !is_null($errors)) {
 				echo '<div class="alert alert-danger alert-dismissible fade in" role="alert">';
 				echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
 				echo '<span aria-hidden="true">&times;</span>';

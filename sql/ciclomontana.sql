@@ -55,7 +55,7 @@ INSERT INTO `ciudad` (`cod_ciudad`, `nom_ciudad`, `cod_departamento`) VALUES
 DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE IF NOT EXISTS `cliente` (
   `id_cliente` int(18) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID del cliente',
-  `nit` varchar(25) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Nit del cliente',
+  `nit` varchar(250) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Nit del cliente',
   `nombre` varchar(250) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Nombre completo',
   `direccion` varchar(250) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Direccion',
   `telefono` varchar(20) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Telefono',

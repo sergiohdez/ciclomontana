@@ -185,6 +185,21 @@ class Clientes extends CI_Controller {
 		}
 	}
 
+	public function options_combo($type = FALSE, $id = FALSE) {
+		$options = array();
+		if ($id !== FALSE) {
+			switch($type) {
+				case 'departamento':
+					$options = $this->departamentos_model->get($id);
+					break;
+				case 'ciudad':
+					$options = $this->ciudades_model->get($id);
+					break;
+			}
+		}
+		echo json_encode($options);
+	}
+
     private function _get_views(&$data) {
         $data['header'] = $this->load->view('layouts/header', NULL, TRUE);
 		$data['footer'] = $this->load->view('layouts/footer', NULL, TRUE);

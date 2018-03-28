@@ -211,5 +211,12 @@ if (empty($default['cupo']) === TRUE) {
 	$script .= '	$(\'#form-clientes #saldo_cupo\').val($(this).val());';
 	$script .= '});';
 }
+$script .= '$(\'#form-clientes #cod_pais\').on(\'change\', function() {';
+$script .= '	getItems(\'departamento\', $(this).val(), \'#cod_departamento\');';
+$script .= '	getItems(\'ciudad\', \'0\', \'#cod_ciudad\');';
+$script .= '});';
+$script .= '$(\'#form-clientes #cod_departamento\').on(\'change\', function() {';
+$script .= '	getItems(\'ciudad\', $(this).val(), \'#cod_ciudad\');';
+$script .= '});';
 $script .= '</script>';
 echo $script;

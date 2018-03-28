@@ -76,3 +76,16 @@ $(document).ready(function () {
 		}
 	});
 });
+
+function getItems(type, id, selector) {
+	var url = base_url + 'clientes/options_combo/' + type + '/' + id;
+	$.get(url, function(data){
+		$(selector).children('option:not(:first)').remove();
+		$.each(JSON.parse(data), function(key, value){
+			$(selector).append('<option value="' + value['COD_' + type.toUpperCase()] + '">' + value['NOM_' + type.toUpperCase()] + '</option>');
+		});
+	}).fail(function (e) {
+		var newHTML = parseXHR(e, 'Ocurrió un error al cargar la URL.');
+		$('#modalView').find('#modalViewBody').prepend(newHTML);
+	});
+}

@@ -82,7 +82,11 @@ function getItems(type, id, selector) {
 	$.get(url, function(data){
 		$(selector).children('option:not(:first)').remove();
 		$.each(JSON.parse(data), function(key, value){
-			$(selector).append('<option value="' + value['COD_' + type.toUpperCase()] + '">' + value['NOM_' + type.toUpperCase()] + '</option>');
+			$(selector).append(
+				$('<option></option>')
+					.attr('value', value['COD_' + type.toUpperCase()])
+					.text(value['NOM_' + type.toUpperCase()])
+			);
 		});
 	}).fail(function (e) {
 		var newHTML = parseXHR(e, 'Ocurrió un error al cargar la URL.');

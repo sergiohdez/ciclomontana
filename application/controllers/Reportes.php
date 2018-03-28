@@ -6,6 +6,7 @@ class Reportes extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('reportes_model', 'reportes_model');
+        $this->load->model('clientes_model', 'clientes_model');
     }
 
     public function index() {
@@ -15,6 +16,8 @@ class Reportes extends CI_Controller {
 		$data['success'] = $this->session->flashdata('success');
         $data['errors'] = $this->session->flashdata('errors');
         $data['visitas_ciudad'] = $this->reportes_model->getVisitasCiudad();
+        $data['cupos_cliente'] = array();
+        $data['clientes'] = $this->clientes_model->get();
         $data['content'] = $this->load->view('reportes/reportes_home', $data, TRUE);
         $migas['miga'] = array('Inicio' => '', 'Reportes' => 'reportes');
         $data['breadcrumb'] = $this->load->view('layouts/breadcrumb', $migas, TRUE);
@@ -35,6 +38,11 @@ class Reportes extends CI_Controller {
             'datatable-responsive/css/responsive.bootstrap4.min.css'
         );
         $data['styles'] = $this->load->view('layouts/styles', $css, TRUE);
+    }
+
+    public function cupos_cliente($id = FALSE) {
+        $data = $this->reportes_model->getCuposCliente($id);
+        echo json_encode($data);
     }
 
 }

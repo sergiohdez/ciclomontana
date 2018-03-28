@@ -17,4 +17,16 @@ class Reportes_model extends CI_Model {
 		return $query->result_array();
     }
 
+    public function getCuposCliente($id = FALSE) {
+        if ($id !== FALSE) {
+            $this->db->select('T0.FECHA, T0.CUPO_CLIENTE');
+            $this->db->from('VISITA T0');
+            $this->db->where('T0.ID_CLIENTE', $id);
+            $this->db->order_by('T0.FECHA','ASC');
+            $query = $this->db->get();
+            return $query->result_array();
+        }
+        return array();
+    }
+
 }

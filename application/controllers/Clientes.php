@@ -6,7 +6,7 @@ class Clientes extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('clientes_model', 'clientes_model');
-        $this->load->model('ciudades_model', 'cliudades_model');
+        $this->load->model('ciudades_model', 'ciudades_model');
         $this->load->model('departamentos_model', 'departamentos_model');
         $this->load->model('paises_model', 'paises_model');
     }
@@ -26,11 +26,7 @@ class Clientes extends CI_Controller {
 	public function data() {
 		$data = $this->clientes_model->get_dt();
 		if (isset($data['data'])) {
-			foreach ($data['data'] as $k => $e) {
-				if (isset($e['NIT'])) {
-					$data['data'][$k]['NIT'] = $this->encryption->decrypt($e['NIT']);
-				}
-			}
+			$this->_decode_nit($data['data']);
 		}
 		echo json_encode($data);
 	}
@@ -41,14 +37,21 @@ class Clientes extends CI_Controller {
 		$data['type'] = $type;
 		$data['title'] = 'Nuevo Cliente';
 		$data['default'] = array(
-            'id_visita' => '',
-            'fecha' => '',
-			'cod_vendedor' => '',
-			'id_cliente' => '',
-			'valor_neto' => '',
-			'observaciones' => ''
+            'id_cliente' => '',
+            'nit' => '',
+			'nombre' => '',
+			'direccion' => '',
+			'telefono' => '',
+			'cod_ciudad' => '',
+			'cod_departamento' => '',
+			'cod_pais' => '',
+			'cupo' => '',
+			'saldo_cupo' => '',
+			'porcentaje_visitas' => ''
 		);
 		$data['paises'] = $this->paises_model->get();
+		$data['departamentos'] = array();
+		$data['ciudades'] = array();
         $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Nuevo Cliente' => 'clientes/create');
         $data['breadcrumb'] = $this->load->view('layouts/breadcrumb', $migas, TRUE);
         if ($type === 'ajax') {
@@ -64,11 +67,14 @@ class Clientes extends CI_Controller {
 		}
 		else {
 			$data = array(
-                'FECHA' => $this->input->post('fecha'),
-				'COD_VENDEDOR' => $this->input->post('cod_vendedor'),
-				'ID_CLIENTE' => $this->input->post('id_cliente'),
-				'VALOR_NETO' => $this->input->post('valor_neto'),
-				'OBSERVACIONES' => $this->input->post('observaciones')
+                'NIT' => $this->encryption->encrypt($this->input->post('nit')),
+				'NOMBRE' => $this->input->post('nombre'),
+				'DIRECCION' => $this->input->post('direccion'),
+				'TELEFONO' => $this->input->post('telefono'),
+				'COD_CIUDAD' => $this->input->post('cod_ciudad'),
+				'CUPO' => $this->input->post('cupo'),
+				'SALDO_CUPO' => $this->input->post('cupo'),
+				'PORCENTAJE_VISITAS' => $this->input->post('porcentaje_visitas')
 			);
 			$rta = $this->clientes_model->insert($data);
 			$this->_set_response('create', $rta, $type);
@@ -80,9 +86,10 @@ class Clientes extends CI_Controller {
 		$type = is_null($this->input->get('type')) ? 'html' : $this->input->get('type');
         $data = array();
 		$data['type'] = $type;
-		$data['title'] = 'Detalles Visita';
+		$data['title'] = 'Detalles Cliente';
+		$this->_decode_nit($record);
 		$data['registro'] = $record;
-        $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Detalles Visita' => 'clientes/view');
+        $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Detalles Cliente' => 'clientes/view');
         $data['breadcrumb'] = $this->load->view('layouts/breadcrumb', $migas, TRUE);
 		if ($type === 'ajax') {
             $base_view = 'clientes/clientes_view';
@@ -100,19 +107,25 @@ class Clientes extends CI_Controller {
         $type = is_null($this->input->get('type')) ? 'html' : $this->input->get('type');
         $data = array();
 		$data['type'] = $type;
-		$data['title'] = 'Editar Visita';
-		$data['view'] = array('pages/menu', 'clientes/clientes_form');
+		$data['title'] = 'Editar Cliente';
+		$this->_decode_nit($record);
 		$data['default'] = array(
-            'id_visita' => $record[0]['ID_VISITA'],
-            'fecha' => $record[0]['FECHA'],
-			'cod_vendedor' => $record[0]['COD_VENDEDOR'],
-			'id_cliente' => $record[0]['ID_CLIENTE'],
-			'valor_neto' => $record[0]['VALOR_NETO'],
-			'observaciones' => $record[0]['OBSERVACIONES']
+            'id_cliente' => $record[0]['ID_CLIENTE'],
+            'nit' => $record[0]['NIT'],
+			'nombre' => $record[0]['NOMBRE'],
+			'direccion' => $record[0]['DIRECCION'],
+			'telefono' => $record[0]['TELEFONO'],
+			'cod_ciudad' => $record[0]['COD_CIUDAD'],
+			'cod_departamento' => $record[0]['COD_DEPARTAMENTO'],
+			'cod_pais' => $record[0]['COD_PAIS'],
+			'cupo' => $record[0]['CUPO'],
+			'saldo_cupo' => $record[0]['SALDO_CUPO'],
+			'porcentaje_visitas' => $record[0]['PORCENTAJE_VISITAS']
 		);
-		$data['vendedores'] = $this->vendedores_model->get();
-		$data['clientes'] = $this->clientes_model->get();
-        $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Editar Visita' => 'clientes/edit');
+		$data['paises'] = $this->paises_model->get();
+		$data['departamentos'] = $this->departamentos_model->get($record[0]['COD_PAIS']);
+		$data['ciudades'] = $this->ciudades_model->get($record[0]['COD_DEPARTAMENTO']);
+        $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Editar Cliente' => 'clientes/edit');
         $data['breadcrumb'] = $this->load->view('layouts/breadcrumb', $migas, TRUE);
 		if ($type === 'ajax') {
             $base_view = 'clientes/clientes_form';
@@ -127,12 +140,15 @@ class Clientes extends CI_Controller {
 		}
 		else {
 			$data = array(
-				'ID_VISITA' => $this->input->post('id_visita'),
-                'FECHA' => $this->input->post('fecha'),
-				'COD_VENDEDOR' => $this->input->post('cod_vendedor'),
 				'ID_CLIENTE' => $this->input->post('id_cliente'),
-				'VALOR_NETO' => $this->input->post('valor_neto'),
-				'OBSERVACIONES' => $this->input->post('observaciones')
+                'NIT' => $this->encryption->encrypt($this->input->post('nit')),
+				'NOMBRE' => $this->input->post('nombre'),
+				'DIRECCION' => $this->input->post('direccion'),
+				'TELEFONO' => $this->input->post('telefono'),
+				'COD_CIUDAD' => $this->input->post('cod_ciudad'),
+				'CUPO' => $this->input->post('cupo'),
+				// 'SALDO_CUPO' => $this->input->post('cupo'), // No se permite
+				'PORCENTAJE_VISITAS' => $this->input->post('porcentaje_visitas')
 			);
 			$rta = $this->clientes_model->update($data);
 			$this->_set_response('edit', $rta, $type);
@@ -144,9 +160,9 @@ class Clientes extends CI_Controller {
         $type = is_null($this->input->get('type')) ? 'html' : $this->input->get('type');
         $data = array();
 		$data['type'] = $type;
-		$data['title'] = 'Borrar Visita';
-		$data['id_visita'] = $record[0]['ID_VISITA'];
-        $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Borrar Visita' => 'clientes/delete');
+		$data['title'] = 'Borrar Cliente';
+		$data['id_cliente'] = $record[0]['ID_CLIENTE'];
+        $migas['miga'] = array('Inicio' => '', 'Clientes' => 'clientes', 'Borrar Cliente' => 'clientes/delete');
         $data['breadcrumb'] = $this->load->view('layouts/breadcrumb', $migas, TRUE);
 		if ($type === 'ajax') {
             $base_view = 'clientes/clientes_delete';
@@ -156,13 +172,13 @@ class Clientes extends CI_Controller {
             $this->_get_views($data);
             $data['content'] = $this->load->view('clientes/clientes_delete', $data, TRUE);
         }
-		$this->form_validation->set_rules('id_visita', 'ID', 'trim|htmlspecialchars|required|integer');
+		$this->form_validation->set_rules('id_cliente', 'ID', 'trim|htmlspecialchars|required|integer');
 		if ($this->form_validation->run() === FALSE) {
 			$this->load->view($base_view, $data);
 		}
 		else {
 			$data = array(
-				'ID_VISITA' => $this->input->post('id_visita')
+				'ID_CLIENTE' => $this->input->post('id_cliente')
 			);
 			$rta = $this->clientes_model->delete($data);
 			$this->_set_response('delete', $rta, $type);
@@ -191,10 +207,13 @@ class Clientes extends CI_Controller {
     }
 
 	private function _valid_form($record = FALSE) {
-		$this->form_validation->set_rules('fecha', 'Fecha Visita', 'trim|htmlspecialchars|required|exact_length[10]');
-		$this->form_validation->set_rules('valor_neto', 'Valor Neto', 'trim|htmlspecialchars|required|decimal|greater_than[0]');
-		$this->form_validation->set_rules('cod_vendedor', 'Vendedor', 'trim|htmlspecialchars|required|integer');
-		$this->form_validation->set_rules('id_cliente', 'Cliente', 'trim|htmlspecialchars|required|integer');
+		$this->form_validation->set_rules('nit', 'NIT', 'trim|htmlspecialchars|required');
+		$this->form_validation->set_rules('nombre', 'Nombre', 'trim|htmlspecialchars|required');
+		$this->form_validation->set_rules('direccion', 'Direcci&oacute;n', 'trim|htmlspecialchars|required');
+		$this->form_validation->set_rules('telefono', 'Tel&eacute;fono', 'trim|htmlspecialchars|required|numeric|greater_than[0]');
+		$this->form_validation->set_rules('cod_ciudad', 'Ciudad', 'trim|htmlspecialchars|required|integer');
+		$this->form_validation->set_rules('cupo', 'Cupo', 'trim|htmlspecialchars|required|decimal|greater_than[0]');
+		$this->form_validation->set_rules('porcentaje_visitas', 'Porcentaje Visitas', 'trim|htmlspecialchars|required|integer|greater_than[0]|less_than_equal_to[100]');
 		return $this->form_validation->run();
 	}
 
@@ -220,6 +239,14 @@ class Clientes extends CI_Controller {
 			}
 			else {
 				echo 'RELOAD';
+			}
+		}
+	}
+
+	private function _decode_nit(&$data) {
+		foreach ($data as $k => $e) {
+			if (isset($e['NIT'])) {
+				$data[$k]['NIT'] = $this->encryption->decrypt($e['NIT']);
 			}
 		}
 	}

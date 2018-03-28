@@ -94,7 +94,6 @@ class Visitas extends CI_Controller {
         $data = array();
 		$data['type'] = $type;
 		$data['title'] = 'Editar Visita';
-		$data['view'] = array('pages/menu', 'visitas/visitas_form');
 		$data['default'] = array(
             'id_visita' => $record[0]['ID_VISITA'],
             'fecha' => $record[0]['FECHA'],

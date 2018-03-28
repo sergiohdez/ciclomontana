@@ -36,6 +36,8 @@
 			}
 			?>
             <?php echo isset($content) ? $content : ''; ?>
+			<br/>
+			<br/>
         </main>
 		
 		<!-- Ventana modal para uso de crear/ver/editar/borrar -->

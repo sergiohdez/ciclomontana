@@ -31,7 +31,7 @@ class Visitas_model extends CI_Model {
 	}
 
 	public function get($id = FALSE) {
-		$this->db->select('T0.ID_VISITA, T0.FECHA, T1.NOM_VENDEDOR, T0.VALOR_NETO, T0.VALOR_VISITA, T2.NOMBRE, T0.OBSERVACIONES, T0.ID_VISITA AS ACTIONS');
+		$this->db->select('T0.ID_VISITA, T0.FECHA, T0.COD_VENDEDOR, T1.NOM_VENDEDOR, T0.VALOR_NETO, T0.VALOR_VISITA, T0.ID_CLIENTE, T2.NOMBRE, T0.OBSERVACIONES, T0.ID_VISITA AS ACTIONS');
 		$this->db->from('VISITA T0');
 		$this->db->join('VENDEDOR T1', 'T0.COD_VENDEDOR = T1.COD_VENDEDOR', 'lef');
 		$this->db->join('CLIENTE T2', 'T0.ID_CLIENTE = T2.ID_CLIENTE', 'left');
@@ -53,7 +53,7 @@ class Visitas_model extends CI_Model {
 		$search = $this->input->post('search');
 
 		$this->db->start_cache();
-		$this->db->select('T0.ID_VISITA, T0.FECHA, T1.NOM_VENDEDOR, T0.VALOR_NETO, T0.VALOR_VISITA, T2.NOMBRE, T0.OBSERVACIONES, T0.ID_VISITA AS ACTIONS');
+		$this->db->select('T0.ID_VISITA, T0.FECHA, T0.COD_VENDEDOR, T1.NOM_VENDEDOR, T0.VALOR_NETO, T0.VALOR_VISITA, T0.ID_CLIENTE, T2.NOMBRE, T0.OBSERVACIONES, T0.ID_VISITA AS ACTIONS');
 		$this->db->from('VISITA T0');
 		$this->db->join('VENDEDOR T1', 'T0.COD_VENDEDOR = T1.COD_VENDEDOR', 'lef');
 		$this->db->join('CLIENTE T2', 'T0.ID_CLIENTE = T2.ID_CLIENTE', 'left');

@@ -4,7 +4,7 @@ $html = '';
 if (count($registro) > 0) {
 	$item = $registro[0];
 	if (isset($type) && $type === 'html') {
-		$html .= anchor(base_url('visitas'), "Regresar al listado", array('class' => 'btn btn-default'));
+		$html .= anchor(base_url('visitas'), "Regresar al listado", array('class' => 'btn btn-outline-secondary'));
 		$html .= '<hr/>';
 	}
 	$html .= '<div class="row">';
@@ -45,9 +45,9 @@ if (count($registro) > 0) {
 		$html .= '<hr/>';
 		$html .= '<div class="row">';
 		$html .= '<div class="col-sm-offset-2 col-sm-10">';
-		$html .= anchor(base_url('visitas/edit/' . $item['ID_VISITA']), 'Editar', array('class' => 'btn btn-default'));
+		$html .= anchor(base_url('visitas/edit/' . $item['ID_VISITA']), 'Editar', array('class' => 'btn btn-primary'));
 		$html .= str_repeat('&nbsp', 2);
-		$html .= anchor(base_url('visitas/delete/' . $item['ID_VISITA']), 'Borrar', array('class' => 'btn btn-default'));
+		$html .= anchor(base_url('visitas/delete/' . $item['ID_VISITA']), 'Borrar', array('class' => 'btn btn-danger'));
 		$html .= '</div>';
 		$html .= '</div>';
 	}

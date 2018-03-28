@@ -29,14 +29,46 @@ $(document).ready(function () {
 				"render": function (data, type, full, meta) {
 					var html = '';
 					html += '<div class="btn-group btn-group-xs" role="group" aria-label="Acciones">';
-					html += '<a href="' + base_url + '#" class="btn btn-default" data-toggle="modal" data-target="#modalView" data-backdrop="static" data-url="' + base_url + 'clientes/view/' + data + '" data-title="Detalles Matriz de Riesgo" data-btn="false">Ver</a>';
-					html += '<a href="' + base_url + '#" class="btn btn-default" data-toggle="modal" data-target="#modalView" data-backdrop="static" data-url="' + base_url + 'clientes/edit/' + data + '" data-title="Editar Matriz de Riesgo" data-btn="true" data-btn-title="Guardar">Editar</a>';
-					html += '<a href="' + base_url + '#" class="btn btn-default" data-toggle="modal" data-target="#modalView" data-backdrop="static" data-url="' + base_url + 'clientes/delete/' + data + '" data-title="Borrar Matriz de Riesgo" data-btn="true">Borrar</a>';
+					html += '<a href="' + base_url + '#" class="btn btn-default" data-toggle="modal" data-target="#modalView" data-backdrop="static" data-url="' + base_url + 'clientes/view/' + data + '" data-title="Detalles Cliente" data-btn="false">Ver</a>';
+					html += '<a href="' + base_url + '#" class="btn btn-default" data-toggle="modal" data-target="#modalView" data-backdrop="static" data-url="' + base_url + 'clientes/edit/' + data + '" data-title="Editar Cliente" data-btn="true" data-btn-title="Guardar">Editar</a>';
+					html += '<a href="' + base_url + '#" class="btn btn-default" data-toggle="modal" data-target="#modalView" data-backdrop="static" data-url="' + base_url + 'clientes/delete/' + data + '" data-title="Borrar Cliente" data-btn="true">Borrar</a>';
 					html += '</div>';
 					return (type === 'display') ? html : data;
 				},
 				"orderable": false,
 				"searcheable": false
+			},
+			{
+				"targets": 1,
+				"data": "NIT",
+				"render": function(data, type, full, meta) {
+					var html = number_format(data, 0, ',', '.');
+					return (type === 'display') ? html : data;
+				}
+			},
+			{
+				"targets": -4,
+				"data": "CUPO",
+				"render": function(data, type, full, meta) {
+					var html = '$ ' + number_format(data, 0, ',', '.');
+					return (type === 'display') ? html : data;
+				}
+			},
+			{
+				"targets": -3,
+				"data": "SALDO_CUPO",
+				"render": function(data, type, full, meta) {
+					var html = '$ ' + number_format(data, 0, ',', '.');
+					return (type === 'display') ? html : data;
+				}
+			},
+			{
+				"targets": -2,
+				"data": "PORCENTAJE_VISITAS",
+				"render": function(data, type, full, meta) {
+					var html = data + ' %';
+					return (type === 'display') ? html : data;
+				}
 			}
 		],
 		"language": {

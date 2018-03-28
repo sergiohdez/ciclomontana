@@ -227,7 +227,7 @@ class Clientes extends CI_Controller {
 		$this->form_validation->set_rules('direccion', 'Direcci&oacute;n', 'trim|htmlspecialchars|required');
 		$this->form_validation->set_rules('telefono', 'Tel&eacute;fono', 'trim|htmlspecialchars|required|numeric|greater_than[0]');
 		$this->form_validation->set_rules('cod_ciudad', 'Ciudad', 'trim|htmlspecialchars|required|integer');
-		$this->form_validation->set_rules('cupo', 'Cupo', 'trim|htmlspecialchars|required|decimal|greater_than[0]');
+		$this->form_validation->set_rules('cupo', 'Cupo', 'trim|htmlspecialchars|required|numeric|greater_than[0]');
 		$this->form_validation->set_rules('porcentaje_visitas', 'Porcentaje Visitas', 'trim|htmlspecialchars|required|integer|greater_than[0]|less_than_equal_to[100]');
 		return $this->form_validation->run();
 	}

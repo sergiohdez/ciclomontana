@@ -161,7 +161,7 @@ CREATE TRIGGER `tr_bi_visitas` BEFORE INSERT ON `visita`
   DECLARE p_porcentaje INT;
   IF new.id_cliente IS NOT NULL THEN
     SELECT porcentaje_visitas INTO p_porcentaje FROM cliente WHERE id_cliente = new.id_cliente;
-    SET new.valor_visita = new.valor_neto * porcentaje;
+    SET new.valor_visita = new.valor_neto * p_porcentaje;
   END IF;
 END
 //

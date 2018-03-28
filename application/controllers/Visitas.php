@@ -189,9 +189,9 @@ class Visitas extends CI_Controller {
 
 	private function _valid_form($record = FALSE) {
 		$this->form_validation->set_rules('fecha', 'Fecha Visita', 'trim|htmlspecialchars|required|exact_length[10]');
-		$this->form_validation->set_rules('valor_neto', 'Valor Neto', 'trim|htmlspecialchars|required|decimal|greater_than[0]');
+		$this->form_validation->set_rules('valor_neto', 'Valor Neto', 'trim|htmlspecialchars|required|numeric|greater_than[0]');
 		$this->form_validation->set_rules('cod_vendedor', 'Vendedor', 'trim|htmlspecialchars|required|integer');
-		$this->form_validation->set_rules('id_cliente', 'Cliente', 'trim|htmlspecialchars|required|integer');
+		$this->form_validation->set_rules('id_cliente', 'Cliente', 'trim|htmlspecialchars|required|integer|callback_id_cliente[valor_neto]');
 		return $this->form_validation->run();
 	}
 
@@ -219,5 +219,24 @@ class Visitas extends CI_Controller {
 				echo 'RELOAD';
 			}
 		}
+	}
+
+	public function id_cliente($valor, $elemento) {
+		$cliente = $this->clientes_model->get($valor);
+		$valor_neto = $this->input->post($elemento);
+		if (count($cliente) > 0) {
+			$valor_visita = doubleval($cliente[0]['PORCENTAJE_VISITAS']) * doubleval($valor_neto);
+			if (doubleval($cliente[0]['SALDO_CUPO']) >= $valor_visita) {
+				return TRUE;
+			}
+			else {
+				$mensaje = 'El cliente no tiene saldo suficiente para el valor neto de la visita';
+			}
+		}
+		else {
+			$mensaje = 'No existe el cliente';
+		}
+		$this->form_validation->set_message('id_cliente', $mensaje);
+		return FALSE;
 	}
 }

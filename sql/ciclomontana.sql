@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS `visita` (
   `observaciones` varchar(1000) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Observaciones de visita',
   `cod_vendedor` int(3) unsigned NOT NULL COMMENT 'Codigo del vendedor',
   `id_cliente` int(18) unsigned NOT NULL COMMENT 'ID del cliente',
+  `cupo_cliente` double(10,2) NOT NULL COMMENT 'Cupo del cliente despues de visita'
   PRIMARY KEY (`id_visita`),
   KEY `fk_vendedor` (`cod_vendedor`),
   KEY `fk_cliente` (`id_cliente`)
@@ -159,10 +160,12 @@ DELIMITER //
 CREATE TRIGGER `tr_bi_visitas` BEFORE INSERT ON `visita`
  FOR EACH ROW BEGIN
   DECLARE p_porcentaje INT;
+  DECLARE p_saldo DOUBLE(10,2);
   IF new.id_cliente IS NOT NULL THEN
-    SELECT porcentaje_visitas INTO p_porcentaje FROM cliente WHERE id_cliente = new.id_cliente;
+    SELECT porcentaje_visitas, saldo_cupo INTO p_porcentaje, p_saldo FROM cliente WHERE id_cliente = new.id_cliente;
     SET new.valor_visita = new.valor_neto * p_porcentaje;
-    UPDATE cliente SET saldo_cupo = cupo - new.valor_visita WHERE id_cliente = new.id_cliente;
+    SET new.cupo_cliente = p_saldo - new.valor_visita;
+    UPDATE cliente SET saldo_cupo = new.cupo_cliente WHERE id_cliente = new.id_cliente;
   END IF;
 END
 //

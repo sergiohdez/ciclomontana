@@ -9,6 +9,7 @@ class Clientes extends CI_Controller {
         $this->load->model('ciudades_model', 'ciudades_model');
         $this->load->model('departamentos_model', 'departamentos_model');
         $this->load->model('paises_model', 'paises_model');
+        $this->load->model('visitas_model', 'visitas_model');
     }
     
     public function index() {
@@ -172,7 +173,7 @@ class Clientes extends CI_Controller {
             $this->_get_views($data);
             $data['content'] = $this->load->view('clientes/clientes_delete', $data, TRUE);
         }
-		$this->form_validation->set_rules('id_cliente', 'ID', 'trim|htmlspecialchars|required|integer');
+		$this->form_validation->set_rules('id_cliente', 'ID', 'trim|htmlspecialchars|required|integer|callback_id_cliente');
 		if ($this->form_validation->run() === FALSE) {
 			$this->load->view($base_view, $data);
 		}
@@ -264,5 +265,17 @@ class Clientes extends CI_Controller {
 				$data[$k]['NIT'] = $this->encryption->decrypt($e['NIT']);
 			}
 		}
+	}
+
+	public function id_cliente($valor) {
+		$visitas = $this->visitas_model->get($valor);
+		if (count($visitas) > 0) {
+			$mensaje = 'El cliente tiene visitas registradas, debe borrarlas antes de intentar realizar esta acción.';
+		}
+		else {
+			return TRUE;
+		}
+		$this->form_validation->set_message('id_cliente', $mensaje);
+		return FALSE;
 	}
 }

@@ -4,6 +4,8 @@ $(document).ready(function () {
     $('#id_cliente').on('change', function() {
         var url = base_url + 'reportes/cupos_cliente/' + $(this).val();
         $.get(url, function(data){
+            dataFechas = [];
+            dataCupos = [];
             $.each(JSON.parse(data), function(key, value){
                 dataFechas[key] = value['FECHA'];
                 dataCupos[key] = value['CUPO_CLIENTE'];
@@ -25,7 +27,7 @@ function graficoVisitasCiudad(dataCiudades, dataVisitas) {
                 datasets: [{
                     data: dataVisitas,
                     lineTension: 0,
-                    backgroundColor: 'transparent',
+                    backgroundColor: '#007bff',
                     borderColor: '#007bff',
                     borderWidth: 2,
                     pointBackgroundColor: '#007bff'

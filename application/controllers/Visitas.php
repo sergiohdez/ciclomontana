@@ -63,6 +63,8 @@ class Visitas extends CI_Controller {
 				'VALOR_NETO' => $this->input->post('valor_neto'),
 				'OBSERVACIONES' => $this->input->post('observaciones')
 			);
+			$tmp = date_create_from_format('d/m/Y', $data['FECHA']);
+			$data['FECHA'] = date_format($tmp, 'Y-m-d');
 			$rta = $this->visitas_model->insert($data);
 			$this->_set_response('create', $rta, $type);
 		}
@@ -94,6 +96,8 @@ class Visitas extends CI_Controller {
         $data = array();
 		$data['type'] = $type;
 		$data['title'] = 'Editar Visita';
+		$tmp = date_create_from_format('Y-m-d', $record[0]['FECHA']);
+		$record[0]['FECHA'] = date_format($tmp, 'd-m-Y');
 		$data['default'] = array(
             'id_visita' => $record[0]['ID_VISITA'],
             'fecha' => $record[0]['FECHA'],
@@ -126,6 +130,8 @@ class Visitas extends CI_Controller {
 				'VALOR_NETO' => $this->input->post('valor_neto'),
 				'OBSERVACIONES' => $this->input->post('observaciones')
 			);
+			$tmp = date_create_from_format('d/m/Y', $data['FECHA']);
+			$data['FECHA'] = date_format($tmp, 'Y-m-d');
 			$rta = $this->visitas_model->update($data);
 			$this->_set_response('edit', $rta, $type);
 		}
@@ -225,12 +231,12 @@ class Visitas extends CI_Controller {
 		$cliente = $this->clientes_model->get($valor);
 		$valor_neto = $this->input->post($elemento);
 		if (count($cliente) > 0) {
-			$valor_visita = doubleval($cliente[0]['PORCENTAJE_VISITAS']) * doubleval($valor_neto);
+			$valor_visita = doubleval($cliente[0]['PORCENTAJE_VISITAS'] / 100) * doubleval($valor_neto);
 			if (doubleval($cliente[0]['SALDO_CUPO']) >= $valor_visita) {
 				return TRUE;
 			}
 			else {
-				$mensaje = 'El cliente no tiene saldo suficiente para el valor neto de la visita';
+				$mensaje = 'El cliente no tiene saldo suficiente para el valor neto de la visita, su saldo es: ' . doubleval($cliente[0]['SALDO_CUPO']);
 			}
 		}
 		else {

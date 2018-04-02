@@ -76,7 +76,7 @@ function graficoCuposCliente(dataFechas, dataCupos) {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: false
+                            beginAtZero: true
                         }
                     }],
                     xAxes: [{

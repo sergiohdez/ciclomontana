@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `visita` (
   `observaciones` varchar(1000) COLLATE utf8_spanish2_ci NOT NULL COMMENT 'Observaciones de visita',
   `cod_vendedor` int(3) unsigned NOT NULL COMMENT 'Codigo del vendedor',
   `id_cliente` int(18) unsigned NOT NULL COMMENT 'ID del cliente',
-  `cupo_cliente` double(10,2) NOT NULL COMMENT 'Cupo del cliente despues de visita'
+  `cupo_cliente` double(10,2) NOT NULL COMMENT 'Cupo del cliente despues de visita',
   PRIMARY KEY (`id_visita`),
   KEY `fk_vendedor` (`cod_vendedor`),
   KEY `fk_cliente` (`id_cliente`)
